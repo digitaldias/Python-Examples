@@ -1,0 +1,87 @@
+resources:
+- repo: self
+queue:
+  name: Hosted Ubuntu 1604
+variables:
+  FunctionAppName: 'yourFunctionAppName'
+  FunctionDirectory: 'yourFunctionAppFolder'
+steps:
+
+- task: DotNetCoreInstaller@0
+  displayName: 'Install .NET Core'
+  inputs:
+    version: 2.1.502
+
+- bash: |
+   # Functions source
+   wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb
+   sudo dpkg -i packages-microsoft-prod.deb
+
+   # Python 3.6 package for Ubuntu 16.04
+   sudo add-apt-repository ppa:jonathonf/python-3.6
+
+   # Update packages list
+   sudo apt-get update
+
+   # Install Azure Functions Core Tools
+   sudo apt-get install python3.6-dev libpython3.6-dev
+
+   # Install Azure Functions Core Tools
+   sudo apt-get install azure-functions-core-tools
+
+   # Install Python3 
+   sudo apt-get install python3.6
+
+   # Install Python Virtual Environment support
+   sudo apt-get install python3.6-venv
+
+   # Initialize Python venv
+   python3.6 -m venv .env
+   source .env/bin/activate
+
+   # Install wheel
+   pip install wheel pytest pytest-cov pytest-mock
+
+   echo 'Installing requirements...'
+   python3.6 -m pip install -r azureFunctions/requirements.txt
+  displayName: 'Install all dependencies'
+
+- task: AzureCLI@1
+  displayName: 'Initialize function app'
+  inputs:
+    azureSubscription: 'yourSubscriptionName'
+
+    scriptLocation: inlineScript
+
+    inlineScript: |
+     cd $(FunctionDirectory)
+
+     func settings add FUNCTIONS_WORKER_RUNTIME python
+
+     # now install Functions extensions for Function
+     func extensions install
+
+    addSpnToEnvironment: true
+
+- script: |
+    source .env/bin/activate
+    pytest --doctest-modules --junitxml=junit/test-results.xml --cov=yourModuleName --cov-report=xml --cov-report=html
+  displayName: 'Test with pytest'
+
+- task: PublishTestResults@2
+  condition: succeededOrFailed()
+  inputs:
+    testResultsFiles: '**/test-*.xml'
+    testRunTitle: 'Publish test results for Python $(python.version)'
+
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.xml'
+    reportDirectory: '$(System.DefaultWorkingDirectory)/**/htmlcov'
+
+  # Publish Build Artifacts, including the .env
+  - task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(System.DefaultWorkingDirectory)' 
+    artifactName: 'drop' 
