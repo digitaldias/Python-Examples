@@ -24,4 +24,4 @@ The scripts as well as the virtual environment are now deployed to a drop folder
 * Install the Azure Functions Core tools in order to be able to publish the functionapp
 * Activate the virtual environment produced during build
 * Retrieve all settings from the existing function app in azure (this step is required as the settings are encrypted)
-* Calling "publish" to transfer the code into a working python FunctionApp in Azure 
+* Calling "publish" to transfer the code into a working python FunctionApp in Azure
