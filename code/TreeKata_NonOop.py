@@ -29,16 +29,19 @@ print("Window width: {}, height: {}".format(width, height))
 
 def randomDegree(min, max):
     """ Return a random degree between min and max """
+
     return min + random.randint(min, max)
 
 def reduce_branch_length(size):
     """ Reduce the branch by a random length of 60-95% """
+
     factor = round(random.uniform(0.6, 0.95), 2)
     return size * factor
 
 
 def drawTree(size, lastX, lastY, angle):
     """ Recursively draws the tree, branch by branch, until the branches are shorter than 15 in length """
+
     lineWidth      = size * 0.1
     angleInRadians = angle * math.pi / 180
     nextY          = lastY - size * math.cos(angleInRadians)
@@ -58,19 +61,21 @@ def start_over(_):
 
     canvas.delete("all")
     t0 = time.time()
-    lastX, lastY = canvas.winfo_width() / 2, canvas.winfo_height() - 10
-    treeSize = canvas.winfo_height() * (1/7.68)
+    lastX, lastY = canvas.winfo_width() / 2, canvas.winfo_height() - 10  # Calculate the starting positions bottom center
+    treeSize = canvas.winfo_height() * (1/7.68)                          # Height of the tree is in the ratio 768pix height goes to 100pix tall tree
     drawTree(treeSize, lastX, lastY, 0)
     finished = "{}ms.".format(round(1000* (time.time() - t0), 1))
-    canvas.create_text(lastX + 12, lastY -12, text=finished, fill='green', anchor=NW )
+    canvas.create_text(lastX + 12, lastY -12, text=finished, fill='green', anchor=NW ) # informal "grass" with time taken to render :D
 
 def end_program(_):
     """ Terminate the program """
+
     print("Program ended.")
     window.destroy()
 
 def configure(event):
     """ When the window resizes, make sure to update """
+
     window.update()
     canvas.update()
     canvas.delete("all")
