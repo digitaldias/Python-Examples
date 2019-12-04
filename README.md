@@ -3,6 +3,7 @@ This is a collection of scripts and other useful stuff that I'm collecting for m
 
 | Things I've struggled with that are now resolved | 
 | ---------------- |
+| [Tree Kata - Python version](https://github.com/digitaldias/Python-Examples/blob/master/code/TreeKata_NonOop.py) |
 | [FunctionApp Build Script for Azure Devops](https://github.com/digitaldias/Python-Examples/blob/master/build-and-test.yaml) |
 | [FunctionApp Release Script for Azure Devops](https://github.com/digitaldias/Python-Examples/blob/master/deploy-to-functionapp.sh) |
 
@@ -10,6 +11,8 @@ This is a collection of scripts and other useful stuff that I'm collecting for m
 Look below for a brief explanation of the rationale behind each of the solutions I've found
 
 -----
+### Tree Kata - Python Version
+One of my more popular code katas, "The animated Tree", originally designed by Seb-Lee Delisle (@seblee) was a fun challenge to port over to Python. In this example, I've opted for the non-OOP version of the code, and I am lacking the render speed to animate the tree properly. Future versions will include animation. 
 
 ### Build script for Azure FunctionApp written in Python
 Well, Python does NOT produce a build output as it is an interpreted language, so what is the reasoning for looking at this as a "Build"?
