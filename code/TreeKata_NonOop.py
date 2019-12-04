@@ -25,25 +25,20 @@ canvas.pack(fill=BOTH, expand=True)
 # Get our Canvas dimensions
 window.update()
 width, height = canvas.winfo_width(), canvas.winfo_height()
-print("Width: {}, Height: {}".format(width, height))
-
-# Find our starting position at the middle of the bottom of the screen
-lastX = width/2
-lastY = height - 10
-
-# Set the height of our tree
-treeSize = 100
+print("Window width: {}, height: {}".format(width, height))
 
 def randomDegree(min, max):
+    """ Return a random degree between min and max """
     return min + random.randint(min, max)
 
 def reduce_branch_length(size):
+    """ Reduce the branch by a random length of 60-95% """
     factor = round(random.uniform(0.6, 0.95), 2)
     return size * factor
 
 
 def drawTree(size, lastX, lastY, angle):
-
+    """ Recursively draws the tree, branch by branch, until the branches are shorter than 15 in length """
     lineWidth      = size * 0.1
     angleInRadians = angle * math.pi / 180
     nextY          = lastY - size * math.cos(angleInRadians)
@@ -59,6 +54,8 @@ def drawTree(size, lastX, lastY, angle):
         drawTree(branchLength, nextX, nextY, angle - randomDegree(0, 35))
 
 def start_over(_):
+    """ Empties the current canvas and draws a new tree """
+
     canvas.delete("all")
     t0 = time.time()
     lastX, lastY = canvas.winfo_width() / 2, canvas.winfo_height() - 10
@@ -68,10 +65,12 @@ def start_over(_):
     canvas.create_text(lastX + 12, lastY -12, text=finished, fill='green', anchor=NW )
 
 def end_program(_):
+    """ Terminate the program """
     print("Program ended.")
     window.destroy()
 
 def configure(event):
+    """ When the window resizes, make sure to update """
     window.update()
     canvas.update()
     canvas.delete("all")
